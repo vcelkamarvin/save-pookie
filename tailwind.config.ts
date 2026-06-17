@@ -9,28 +9,29 @@ const config: Config = {
     extend: {
       colors: {
         pookie: {
-          bg: "#FFF7FB",
+          bg: "#FAFAF7",
           card: "#FFFFFF",
-          pink: "#FF8ACD",
-          purple: "#B692FF",
-          mint: "#8EF0C2",
-          yellow: "#FFD36E",
-          text: "#2D2433",
-          muted: "#8C7C95",
-          danger: "#FF6B8A",
-          success: "#58CC8B",
-          ink: "#251E2B"
+          pink: "#F7A8C8",
+          purple: "#A88CFF",
+          mint: "#BFE7FF",
+          yellow: "#F6C85F",
+          text: "#1F1F1F",
+          muted: "#8A8A8A",
+          danger: "#FF6F91",
+          success: "#63D68A",
+          ink: "#1F1F1F",
+          border: "#EDEDE8"
         }
       },
       boxShadow: {
-        soft: "0 18px 50px rgba(121, 68, 116, 0.16)",
-        button: "0 10px 0 rgba(150, 84, 136, 0.18)"
+        soft: "0 18px 50px rgba(31, 31, 31, 0.08)",
+        button: "0 10px 24px rgba(31, 31, 31, 0.10)"
       },
       borderRadius: {
         pookie: "30px"
       },
       fontFamily: {
-        rounded: ["var(--font-nunito)", "ui-rounded", "system-ui", "sans-serif"]
+        rounded: ["var(--font-inter)", "Helvetica Neue", "Arial", "system-ui", "sans-serif"]
       }
     }
   },

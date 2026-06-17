@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  color: #32251f;
-  background: #fff4dc;
+  color: #1f1f1f;
+  background: #fafaf7;
 }
 
 * {
@@ -18,14 +18,12 @@ body {
 }
 
 body {
-  font-family: var(--font-nunito), ui-rounded, system-ui, sans-serif;
+  font-family: var(--font-inter), "Helvetica Neue", Arial, system-ui, sans-serif;
   background:
-    linear-gradient(rgba(95, 70, 58, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(95, 70, 58, 0.035) 1px, transparent 1px),
-    radial-gradient(circle at 16% 12%, rgba(255, 190, 111, 0.28), transparent 26rem),
-    radial-gradient(circle at 86% 7%, rgba(255, 138, 205, 0.16), transparent 22rem),
-    linear-gradient(135deg, #fff4dc 0%, #ffe7cf 48%, #f8d7b6 100%);
-  background-size: 28px 28px, 28px 28px, auto, auto, auto;
+    radial-gradient(circle at 12% 2%, rgba(168, 140, 255, 0.22), transparent 26rem),
+    radial-gradient(circle at 92% 10%, rgba(247, 168, 200, 0.20), transparent 24rem),
+    radial-gradient(circle at 52% 92%, rgba(191, 231, 255, 0.28), transparent 28rem),
+    linear-gradient(135deg, #fafaf7 0%, #ffffff 54%, #f8f7f2 100%);
 }
 
 button,
@@ -75,5 +73,41 @@ button {
 }
 
 .anime-room {
-  box-shadow: inset 0 0 0 1px rgba(60, 43, 36, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(31, 31, 31, 0.08);
+}
+
+.glass-card {
+  background:
+    radial-gradient(circle at 12% 15%, rgba(191, 231, 255, 0.95), transparent 9rem),
+    radial-gradient(circle at 86% 78%, rgba(168, 140, 255, 0.72), transparent 8rem),
+    radial-gradient(circle at 78% 5%, rgba(247, 168, 200, 0.52), transparent 7rem),
+    rgba(255, 255, 255, 0.82);
+}
+
+.cat-face {
+  position: relative;
+  background: #fff;
+  border: 1px solid #ededed;
+  box-shadow: 0 10px 28px rgba(31, 31, 31, 0.08);
+}
+
+.cat-face::before,
+.cat-face::after {
+  content: "";
+  position: absolute;
+  top: -7%;
+  width: 30%;
+  height: 30%;
+  background: #fff;
+  border-left: 1px solid #ededed;
+  border-top: 1px solid #ededed;
+  transform: rotate(45deg);
+}
+
+.cat-face::before {
+  left: 17%;
+}
+
+.cat-face::after {
+  right: 17%;
 }

@@ -23,11 +23,11 @@ type Upgrade = {
 };
 
 const categories = [
-  { name: "Food & Cafes", amount: 82, color: "bg-pookie-pink" },
-  { name: "Shopping", amount: 76, color: "bg-pookie-purple" },
-  { name: "Transport", amount: 31, color: "bg-pookie-mint" },
-  { name: "Subscriptions", amount: 38, color: "bg-pookie-yellow" },
-  { name: "Other", amount: 25, color: "bg-pookie-danger" }
+  { name: "Food & cafes", amount: 82, trend: "12% lower than usual", color: "bg-pookie-pink" },
+  { name: "Shopping", amount: 76, trend: "EUR 18 over plan", color: "bg-pookie-purple" },
+  { name: "Transport", amount: 31, trend: "on track", color: "bg-pookie-mint" },
+  { name: "Subscriptions", amount: 38, trend: "one price increase", color: "bg-pookie-yellow" },
+  { name: "Other", amount: 25, trend: "steady", color: "bg-pookie-danger" }
 ];
 
 const suggestions = [
@@ -194,7 +194,7 @@ export default function App() {
 
   return (
     <main className="min-h-screen bg-pookie-bg text-pookie-text sm:grid sm:place-items-center sm:p-6">
-      <div className="relative min-h-screen w-full overflow-hidden bg-pookie-bg shadow-soft sm:min-h-[844px] sm:w-[390px] sm:rounded-[42px] sm:border-[10px] sm:border-[#fff8ef]">
+      <div className="relative min-h-screen w-full overflow-hidden bg-pookie-bg shadow-soft sm:min-h-[844px] sm:w-[390px] sm:rounded-[42px] sm:border-[10px] sm:border-white">
         <div
           className={`phone-scroll h-screen overflow-y-auto px-5 pb-6 pt-5 sm:h-[824px] ${
             hasBottomNav ? "pb-44" : ""
@@ -212,21 +212,33 @@ function Onboarding({ onStart }: { onStart: () => void }) {
   return (
     <section className="flex min-h-[calc(100vh-2.5rem)] flex-col justify-between sm:min-h-[780px]">
       <div>
-        <BrandPill />
-        <div className="mt-8 overflow-hidden rounded-[34px] border-2 border-[#3C2B24] bg-[#f7c986] shadow-soft">
-          <AnimeRoomScene compact />
+        <div className="flex items-center justify-between">
+          <BrandPill />
+          <span className="rounded-full border border-pookie-border bg-white px-3 py-2 text-xs font-medium text-pookie-muted">
+            Demo
+          </span>
         </div>
-        <h1 className="mt-8 text-[3rem] font-black leading-[0.95] tracking-normal">
-          Save money. Make Pookie cozy.
+        <div className="mt-14 grid place-items-center">
+          <div className="glass-card grid h-72 w-full place-items-center rounded-[40px] border border-white/80 shadow-soft">
+            <div className="relative">
+              <div className="absolute -right-8 -top-8 rounded-full bg-pookie-pink px-3 py-1 text-xs font-semibold text-white">
+                proud
+              </div>
+              <PookieAvatar size="large" />
+            </div>
+          </div>
+        </div>
+        <h1 className="mt-10 text-center text-[2.65rem] font-bold leading-[1.02] tracking-[-0.04em]">
+          Your money, but cuter.
         </h1>
-        <p className="mt-4 text-lg font-bold leading-7 text-pookie-muted">
-          Scan bills, move money into savings, and unlock a warm little anime room for your money cat.
+        <p className="mx-auto mt-4 max-w-[19rem] text-center text-base font-normal leading-6 text-pookie-muted">
+          Save more, understand spending, and keep Pookie happy with simple daily money habits.
         </p>
       </div>
       <div className="mt-8">
-        <PrimaryButton onClick={onStart}>Start saving</PrimaryButton>
-        <p className="mt-4 text-center text-sm font-extrabold text-pookie-muted">
-          No judgment. Just cute finance.
+        <PrimaryButton onClick={onStart}>Start</PrimaryButton>
+        <p className="mt-4 text-center text-sm font-medium text-pookie-muted">
+          Read-only demo. No real bank connection.
         </p>
       </div>
     </section>
@@ -236,35 +248,35 @@ function Onboarding({ onStart }: { onStart: () => void }) {
 function BankConnect({ onDemo }: { onDemo: () => void }) {
   return (
     <section>
-      <TopBar title="Demo setup" />
-      <h1 className="mt-7 text-4xl font-black leading-tight">How Pookie knows you saved</h1>
-      <p className="mt-3 text-lg font-bold leading-7 text-pookie-muted">
+      <TopBar title="Verification" />
+      <h1 className="mt-7 text-4xl font-bold leading-tight tracking-[-0.035em]">How Pookie knows you saved</h1>
+      <p className="mt-3 text-base leading-6 text-pookie-muted">
         Real savings should be counted when money moves, not when you tap a cute button.
       </p>
-      <div className="mt-8 rounded-[32px] bg-pookie-ink p-6 text-white shadow-soft">
+      <div className="glass-card mt-8 rounded-[32px] border border-white p-6 shadow-soft">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-pookie-mint">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-pookie-muted">
               Coming soon
             </p>
-            <h2 className="mt-3 text-2xl font-black">Read-only bank check</h2>
+            <h2 className="mt-3 text-2xl font-bold tracking-[-0.02em]">Read-only bank check</h2>
           </div>
-          <span className="grid h-14 w-14 place-items-center rounded-2xl bg-white/12 text-3xl">🏦</span>
+          <span className="grid h-12 w-12 place-items-center rounded-full bg-white text-lg shadow-soft">✓</span>
         </div>
-        <p className="mt-8 text-lg font-extrabold">
+        <p className="mt-8 text-base font-medium leading-6">
           Pookie verifies transfers to savings, lower balances on bills, and receipt scans.
         </p>
-        <div className="mt-5 h-3 rounded-full bg-white/16">
+        <div className="mt-5 h-2 rounded-full bg-white/50">
           <div className="h-3 w-2/3 rounded-full bg-pookie-pink" />
         </div>
       </div>
       <div className="mt-5 grid grid-cols-3 gap-3">
         {["Read-only access", "Transfer detected", "Demo mode now"].map((item) => (
-          <div key={item} className="rounded-3xl bg-white p-3 text-center shadow-soft">
-            <div className="mx-auto mb-2 grid h-9 w-9 place-items-center rounded-full bg-pookie-mint/45">
+          <div key={item} className="rounded-3xl border border-pookie-border bg-white p-3 text-center">
+            <div className="mx-auto mb-2 grid h-8 w-8 place-items-center rounded-full bg-pookie-mint/45 text-sm">
               ✓
             </div>
-            <p className="text-xs font-black leading-4">{item}</p>
+            <p className="text-xs font-semibold leading-4">{item}</p>
           </div>
         ))}
       </div>
@@ -306,60 +318,96 @@ function Home({
   return (
     <section>
       <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-black text-pookie-muted">Good morning, bestie</p>
-          <h1 className="text-3xl font-black">Save Pookie</h1>
+        <div className="flex items-center gap-3">
+          <div className="grid h-11 w-11 place-items-center rounded-full bg-white shadow-soft">
+            <PookieAvatar size="small" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-pookie-muted">Good morning</p>
+            <h1 className="text-xl font-semibold tracking-[-0.02em]">Let&apos;s keep your money in control</h1>
+          </div>
         </div>
         <button
           onClick={onPlus}
-          className="rounded-full bg-pookie-ink px-4 py-3 text-sm font-black text-white"
+          className="grid h-11 w-11 place-items-center rounded-full border border-pookie-border bg-white text-lg shadow-soft"
         >
-          Plus
+          ◦
         </button>
       </div>
-      <div className="mt-5 overflow-hidden rounded-[34px] border-2 border-[#3C2B24] bg-[#f7c986] shadow-soft">
-        <AnimeRoomScene compact />
+      <div className="glass-card mt-6 rounded-[34px] border border-white p-6 shadow-soft">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-sm font-medium text-pookie-muted">Safe to spend this week</p>
+            <h2 className="mt-3 text-6xl font-bold tracking-[-0.06em]">€126</h2>
+            <p className="mt-3 max-w-[15rem] text-sm leading-5 text-pookie-muted">
+              after bills, savings goal, and usual spending
+            </p>
+          </div>
+          <span className="rounded-full bg-white/85 px-3 py-2 text-xs font-semibold text-pookie-success">
+            stable
+          </span>
+        </div>
       </div>
-      <div className="mt-4 rounded-[28px] bg-white p-5 shadow-soft">
+      <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
         <div className="flex gap-4">
-          <div className="grid h-24 w-24 shrink-0 place-items-center rounded-[28px] bg-[#FFE7C2]">
-            <div className="floaty text-6xl">🐱</div>
+          <div className="grid h-16 w-16 shrink-0 place-items-center rounded-3xl bg-[#FAFAF7]">
+            <PookieAvatar />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-black text-pookie-muted">Pookie</p>
-            <h2 className="mt-1 text-2xl font-black leading-7">Cozy because EUR {verifiedSavings} is verified</h2>
-            <StatBar label="Happiness" value={86} color="bg-pookie-pink" />
-            <StatBar label="Energy" value={72} color="bg-pookie-mint" />
+            <p className="text-sm font-medium text-pookie-muted">Pookie companion</p>
+            <h2 className="mt-1 text-lg font-semibold tracking-[-0.01em]">Pookie is proud today</h2>
+            <p className="mt-1 text-sm leading-5 text-pookie-muted">
+              You spent 12% less on cafes this week.
+            </p>
+            <StatBar label="Mood" value={86} color="bg-pookie-pink" />
           </div>
         </div>
       </div>
-      <div className="mt-4 rounded-[32px] bg-[#5f463a] p-5 text-white shadow-soft">
+      <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
+        <h2 className="text-base font-semibold tracking-[-0.01em]">Quick access</h2>
+        <div className="mt-4 grid grid-cols-5 gap-2">
+          {[
+            ["Budget", "□", onSuggestions],
+            ["Check", "✓", onCheck],
+            ["Goals", "◎", onVerify],
+            ["Subs", "≡", onSuggestions],
+            ["Room", "⌂", onScan]
+          ].map(([label, icon, action]) => (
+            <button
+              key={label as string}
+              onClick={action as () => void}
+              className="min-w-0 rounded-2xl bg-[#FAFAF7] px-2 py-3 text-center"
+            >
+              <span className="mx-auto grid h-8 w-8 place-items-center rounded-xl bg-white text-sm shadow-soft">
+                {icon as string}
+              </span>
+              <span className="mt-2 block truncate text-[0.65rem] font-medium text-pookie-muted">
+                {label as string}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
         <div className="flex items-end justify-between">
           <div>
-            <p className="font-black opacity-80">Verified saved this month</p>
-            <h2 className="mt-1 text-4xl font-black">EUR {savedThisMonth}</h2>
-            <p className="mt-1 font-extrabold">Goal: EUR {monthlyGoal}</p>
+            <p className="text-sm font-medium text-pookie-muted">Monthly savings</p>
+            <h2 className="mt-1 text-3xl font-bold tracking-[-0.04em]">
+              €{savedThisMonth} <span className="text-lg font-medium text-pookie-muted">/ €{monthlyGoal}</span>
+            </h2>
           </div>
-          <div className="rounded-2xl bg-white px-3 py-2 text-sm font-black text-[#5f463a]">
-            {progress}%
-          </div>
+          <span className="text-sm font-semibold text-pookie-success">€118 left</span>
         </div>
-        <div className="mt-5 h-4 rounded-full bg-white/25">
-          <div className="h-4 rounded-full bg-pookie-yellow" style={{ width: `${progress}%` }} />
+        <div className="mt-4 h-2 rounded-full bg-[#F0F0EC]">
+          <div className="h-2 rounded-full bg-pookie-success" style={{ width: `${progress}%` }} />
         </div>
-      </div>
-      <div className="mt-4 rounded-[28px] bg-[#FFF5DA] p-4 shadow-soft">
-        <p className="text-sm font-black uppercase tracking-[0.12em] text-pookie-muted">Proof logic</p>
-        <p className="mt-2 text-lg font-black leading-6">
-          Pending EUR {pendingSavings} becomes real only after a savings transfer or bill reduction is verified.
-        </p>
       </div>
       <div className="mt-5 grid grid-cols-2 gap-3">
-        <PrimaryButton onClick={onScan}>Scan bill</PrimaryButton>
-        <SecondaryButton onClick={onVerify}>Verify EUR 5</SecondaryButton>
+        <SecondaryButton onClick={onScan}>Scan bill</SecondaryButton>
+        <PrimaryButton onClick={onVerify}>Verify €5</PrimaryButton>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3">
-        <MiniCard label="5-day saving streak" value="🔥" />
+        <MiniCard label="Pending savings" value={`€${pendingSavings}`} />
         <MiniCard label={`${scannedBills} bills scanned`} value="▣" />
       </div>
       <button
@@ -367,12 +415,12 @@ function Home({
         className="mt-4 flex w-full items-center justify-between rounded-[30px] bg-white p-4 text-left shadow-soft"
       >
         <span>
-          <span className="block text-sm font-black text-pookie-muted">Pookie tip</span>
-          <span className="text-lg font-black">Find a tiny saving win</span>
+          <span className="block text-sm font-medium text-pookie-muted">Smart insight</span>
+          <span className="text-base font-semibold">Your money looks calmer today.</span>
         </span>
-        <span className="text-3xl">✨</span>
+        <span className="text-2xl">✦</span>
       </button>
-      <p className="mt-4 text-center text-xs font-black text-pookie-muted">{xp} XP earned in demo mode</p>
+      <p className="mt-4 text-center text-xs font-medium text-pookie-muted">{xp} XP earned in demo mode</p>
     </section>
   );
 }
@@ -389,30 +437,30 @@ function Scanner({
   return (
     <section>
       <TopBar title="Bill scanner" />
-      <h1 className="mt-6 text-4xl font-black leading-tight">Scan receipts and bills</h1>
-      <p className="mt-3 text-lg font-bold leading-7 text-pookie-muted">
+      <h1 className="mt-6 text-4xl font-bold leading-tight tracking-[-0.04em]">Scan receipts and bills</h1>
+      <p className="mt-3 text-base leading-6 text-pookie-muted">
         Pookie reads the bill, finds recurring charges, and suggests a concrete saving action.
       </p>
-      <div className="mt-6 rounded-[34px] border-2 border-[#3C2B24] bg-[#2b211f] p-4 shadow-soft">
-        <div className="relative h-80 overflow-hidden rounded-[26px] bg-gradient-to-b from-[#7b5a43] to-[#201817]">
-          <div className="absolute inset-x-10 top-8 h-64 rotate-[-2deg] rounded-xl bg-[#fff6df] p-5 font-mono text-[0.72rem] leading-5 text-[#2b211f] shadow-soft">
-            <p className="text-center font-black">CITY MARKET</p>
+      <div className="glass-card mt-6 rounded-[34px] border border-white p-4 shadow-soft">
+        <div className="relative h-80 overflow-hidden rounded-[26px] bg-white/55">
+          <div className="absolute inset-x-10 top-8 h-64 rotate-[-2deg] rounded-xl border border-pookie-border bg-white p-5 font-mono text-[0.72rem] leading-5 text-pookie-ink shadow-soft">
+            <p className="text-center font-bold">CITY MARKET</p>
             <p className="mt-3">Coffee x2 ........ EUR 8.00</p>
             <p>Snacks ........... EUR 6.40</p>
             <p>Streaming ........ EUR 12.00</p>
             <p>Groceries ........ EUR 34.10</p>
-            <p className="mt-3 border-t border-dashed border-[#2b211f] pt-3">TOTAL EUR 60.50</p>
+            <p className="mt-3 border-t border-dashed border-pookie-border pt-3">TOTAL EUR 60.50</p>
           </div>
-          <div className="absolute inset-8 rounded-[26px] border-4 border-pookie-pink/80" />
-          <div className="absolute bottom-5 left-1/2 grid h-20 w-20 -translate-x-1/2 place-items-center rounded-full border-4 border-white bg-pookie-pink text-3xl text-white">
+          <div className="absolute inset-8 rounded-[26px] border-2 border-pookie-pink/80" />
+          <div className="absolute bottom-5 left-1/2 grid h-16 w-16 -translate-x-1/2 place-items-center rounded-full border border-white bg-pookie-ink text-2xl text-white shadow-soft">
             ▣
           </div>
         </div>
       </div>
-      <div className="mt-4 rounded-[28px] bg-white p-5 shadow-soft">
-        <p className="text-sm font-black text-pookie-muted">Detected from demo scan</p>
-        <h2 className="mt-1 text-2xl font-black">Save EUR 3 by swapping one snack run</h2>
-        <p className="mt-2 font-bold text-pookie-muted">
+      <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
+        <p className="text-sm font-medium text-pookie-muted">Detected from demo scan</p>
+        <h2 className="mt-1 text-xl font-semibold">Save €3 by swapping one snack run</h2>
+        <p className="mt-2 text-sm leading-5 text-pookie-muted">
           This creates pending savings. Pookie only counts it as saved after the linked bank shows EUR 3 moved to savings.
         </p>
       </div>
@@ -420,7 +468,7 @@ function Scanner({
         <PrimaryButton onClick={onScan}>Scan demo bill</PrimaryButton>
         <SecondaryButton onClick={onVerify}>Verify EUR 3</SecondaryButton>
       </div>
-      <p className="mt-4 text-center text-sm font-black text-pookie-muted">
+      <p className="mt-4 text-center text-sm font-medium text-pookie-muted">
         {scannedBills} scanned bills in demo mode
       </p>
     </section>
@@ -459,14 +507,14 @@ function DailyCheck({
         </div>
         <span className="font-black">{Object.keys(answers).length}/3</span>
       </div>
-      <h1 className="mt-7 text-4xl font-black leading-tight">Quick money check</h1>
-      <p className="mt-3 font-bold text-pookie-muted">
+      <h1 className="mt-7 text-4xl font-bold leading-tight tracking-[-0.04em]">Daily money check</h1>
+      <p className="mt-3 leading-6 text-pookie-muted">
         This creates a pending saving. It counts after the transfer is verified.
       </p>
       <div className="mt-6 space-y-4">
         {questions.map((question, index) => (
-          <div key={question.text} className="rounded-[32px] bg-white p-5 shadow-soft">
-            <p className="text-xl font-black">{question.text}</p>
+          <div key={question.text} className="rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
+            <p className="text-lg font-semibold">{question.text}</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {question.answers.map((answer) => {
                 const selected = answers[index] === answer;
@@ -474,10 +522,10 @@ function DailyCheck({
                   <button
                     key={answer}
                     onClick={() => setAnswers({ ...answers, [index]: answer })}
-                    className={`rounded-full border-2 px-4 py-3 text-sm font-black transition ${
+                    className={`rounded-full border px-4 py-3 text-sm font-semibold transition ${
                       selected
-                        ? "border-pookie-pink bg-pookie-pink text-white"
-                        : "border-[#F0DDEA] bg-[#FFF7FB] text-pookie-text"
+                        ? "border-pookie-ink bg-pookie-ink text-white"
+                        : "border-pookie-border bg-[#FAFAF7] text-pookie-text"
                     }`}
                   >
                     {answer}
@@ -503,44 +551,53 @@ function Spending({ onSuggestions }: { onSuggestions: () => void }) {
   return (
     <section>
       <TopBar title="Spending" />
-      <h1 className="mt-6 text-4xl font-black">This week&apos;s leaks</h1>
-      <div className="mt-5 rounded-[34px] bg-white p-5 shadow-soft">
+      <h1 className="mt-6 text-4xl font-bold tracking-[-0.04em]">Weekly overview</h1>
+      <div className="glass-card mt-5 rounded-[34px] border border-white p-5 shadow-soft">
+        <p className="text-sm font-medium text-pookie-muted">Total spent this week</p>
+        <h2 className="mt-2 text-5xl font-bold tracking-[-0.06em]">€214</h2>
+        <div className="mt-5 grid grid-cols-3 gap-2">
+          <Metric label="Income" value="€420" trend="+4.2%" />
+          <Metric label="Expenses" value="€214" trend="-12%" danger />
+          <Metric label="Savings" value="€182" trend="on track" />
+        </div>
+      </div>
+      <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
         <div className="flex gap-3">
-          <span className="grid h-14 w-14 place-items-center rounded-2xl bg-[#FFE4F3] text-3xl">🐱</span>
+          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#FAFAF7]">
+            <PookieAvatar size="small" />
+          </div>
           <div>
-            <p className="text-sm font-black text-pookie-muted">Pookie says</p>
-            <p className="mt-1 text-xl font-black leading-7">
-              Bestie, your cafes are stealing my snack budget 😭
+            <p className="text-sm font-medium text-pookie-muted">Pookie noticed</p>
+            <p className="mt-1 text-base font-semibold leading-6">
+              Cafes are your biggest money leak this week.
             </p>
           </div>
         </div>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3">
         <Insight title="Total spent" value="EUR 214" />
-        <Insight title="Biggest category" value="Food & cafes" />
-        <Insight title="Subscriptions" value="EUR 38/mo" />
-        <Insight title="Shopping" value="EUR 76" />
+        <Insight title="Income" value="EUR 420" />
+        <Insight title="Expenses" value="EUR 214" />
+        <Insight title="Savings" value="EUR 182" />
       </div>
-      <div className="mt-4 rounded-[30px] bg-pookie-yellow p-5 shadow-soft">
-        <p className="text-sm font-black uppercase tracking-[0.12em] text-pookie-ink/65">
-          Money leak detected
-        </p>
-        <h2 className="mt-2 text-2xl font-black">EUR 24 on small snacks this week</h2>
-      </div>
-      <div className="mt-4 rounded-[32px] bg-white p-5 shadow-soft">
-        <h2 className="text-xl font-black">Cute category bars</h2>
+      <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
+        <h2 className="text-lg font-semibold tracking-[-0.01em]">Categories</h2>
         <div className="mt-5 space-y-4">
           {categories.map((category) => (
-            <div key={category.name}>
-              <div className="mb-2 flex justify-between text-sm font-black">
-                <span>{category.name}</span>
-                <span>EUR {category.amount}</span>
-              </div>
-              <div className="h-4 rounded-full bg-[#F4E8F3]">
-                <div
-                  className={`h-4 rounded-full ${category.color}`}
-                  style={{ width: `${(category.amount / max) * 100}%` }}
-                />
+            <div key={category.name} className="flex items-center gap-3">
+              <span className={`h-9 w-9 rounded-2xl ${category.color} opacity-80`} />
+              <div className="min-w-0 flex-1">
+                <div className="flex justify-between gap-3 text-sm">
+                  <span className="font-semibold">{category.name}</span>
+                  <span className="font-semibold">€{category.amount}</span>
+                </div>
+                <p className="mt-1 text-xs text-pookie-muted">{category.trend}</p>
+                <div className="mt-2 h-1.5 rounded-full bg-[#F0F0EC]">
+                  <div
+                    className={`h-1.5 rounded-full ${category.color}`}
+                    style={{ width: `${(category.amount / max) * 100}%` }}
+                  />
+                </div>
               </div>
             </div>
           ))}
@@ -557,27 +614,27 @@ function Suggestions({ onAccept }: { onAccept: () => void }) {
   return (
     <section>
       <TopBar title="Tiny wins" />
-      <h1 className="mt-6 text-4xl font-black leading-tight">Pookie found easy saves</h1>
-      <p className="mt-3 font-bold text-pookie-muted">Pick one challenge and keep the streak warm.</p>
+      <h1 className="mt-6 text-4xl font-bold leading-tight tracking-[-0.04em]">Smart saving challenges</h1>
+      <p className="mt-3 leading-6 text-pookie-muted">Pick one calm action. Small save, cozy upgrade.</p>
       <div className="mt-6 space-y-4">
         {suggestions.map((suggestion) => (
-          <div key={suggestion.title} className="rounded-[32px] bg-white p-5 shadow-soft">
+          <div key={suggestion.title} className="rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
             <div className="flex items-center gap-4">
-              <span className="grid h-16 w-16 place-items-center rounded-3xl bg-[#FFF1C9] text-3xl">
+              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[#FAFAF7] text-xl">
                 {suggestion.emoji}
               </span>
               <div className="min-w-0 flex-1">
-                <h2 className="text-xl font-black">{suggestion.title}</h2>
-                <p className="mt-1 font-extrabold text-pookie-muted">{suggestion.saving}</p>
+                <h2 className="text-lg font-semibold">{suggestion.title}</h2>
+                <p className="mt-1 text-sm text-pookie-muted">{suggestion.saving}</p>
               </div>
             </div>
             <div className="mt-4 flex items-center justify-between">
-              <span className="rounded-full bg-pookie-mint/45 px-3 py-2 text-xs font-black uppercase">
+              <span className="rounded-full bg-pookie-mint/45 px-3 py-2 text-xs font-semibold uppercase">
                 {suggestion.difficulty}
               </span>
               <button
                 onClick={onAccept}
-                className="rounded-full bg-pookie-ink px-5 py-3 text-sm font-black text-white"
+                className="rounded-full bg-pookie-ink px-5 py-3 text-sm font-semibold text-white"
               >
                 Accept challenge
               </button>
@@ -604,44 +661,48 @@ function Room({
     <section>
       <div className="flex items-center justify-between">
         <TopBar title="Pookie room" compact />
-        <div className="rounded-full bg-pookie-yellow px-4 py-2 text-sm font-black">🪙 {coins}</div>
+        <div className="rounded-full border border-pookie-border bg-white px-4 py-2 text-sm font-semibold">
+          {coins} coins
+        </div>
       </div>
-      <div className="mt-5 overflow-hidden rounded-[40px] bg-gradient-to-b from-[#FFE2F3] to-[#DDF9EB] p-5 shadow-soft">
+      <div className="mt-5 overflow-hidden rounded-[34px] border border-pookie-border bg-white p-3 shadow-soft">
         <AnimeRoomScene />
       </div>
-      <div className="mt-5 rounded-[30px] bg-white p-5 shadow-soft">
-        <p className="text-sm font-black text-pookie-muted">Room level</p>
-        <h1 className="text-3xl font-black">Level 2 Cozy Room</h1>
+      <div className="mt-5 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
+        <p className="text-sm font-medium text-pookie-muted">Level 2 Cozy Room</p>
+        <h1 className="mt-1 text-2xl font-bold tracking-[-0.03em]">
+          Upgrade Pookie&apos;s space by building better money habits.
+        </h1>
       </div>
-      <h2 className="mt-6 text-xl font-black">Items unlocked</h2>
+      <h2 className="mt-6 text-lg font-semibold">Unlocked</h2>
       <div className="mt-3 flex flex-wrap gap-2">
         {owned.map((item) => (
-          <span key={item.name} className="rounded-full bg-white px-4 py-3 text-sm font-black shadow-soft">
-            {item.emoji} {item.name}
+          <span key={item.name} className="rounded-full border border-pookie-border bg-white px-4 py-2 text-sm font-medium">
+            {item.name}
           </span>
         ))}
       </div>
-      <h2 className="mt-6 text-xl font-black">Locked cuties</h2>
+      <h2 className="mt-6 text-lg font-semibold">Lifestyle upgrades</h2>
       <div className="mt-3 grid grid-cols-2 gap-3">
         {locked.map((item) => (
-          <div key={item.name} className="rounded-[28px] bg-white p-4 shadow-soft">
-            <div className="text-4xl grayscale">{item.emoji}</div>
-            <h3 className="mt-2 font-black">{item.name}</h3>
-            <p className="text-sm font-extrabold text-pookie-muted">{item.cost} coins</p>
+          <div key={item.name} className="rounded-[24px] border border-pookie-border bg-white p-4 shadow-soft">
+            <div className="h-10 w-10 rounded-2xl bg-[#FAFAF7]" />
+            <h3 className="mt-3 font-semibold">{item.name}</h3>
+            <p className="text-sm text-pookie-muted">{item.cost} coins</p>
             <button
               onClick={() => onBuy(item.name, item.cost)}
               disabled={coins < item.cost}
-              className="mt-3 w-full rounded-full bg-pookie-ink px-3 py-3 text-sm font-black text-white disabled:bg-[#CDBDCD]"
+              className="mt-3 w-full rounded-full bg-pookie-ink px-3 py-3 text-sm font-semibold text-white disabled:bg-[#CDBDCD]"
             >
               Upgrade
             </button>
           </div>
         ))}
-        {["Window View", "Golden Food Bowl"].map((name) => (
-          <div key={name} className="rounded-[28px] bg-white/70 p-4 shadow-soft">
-            <div className="text-4xl grayscale">{name === "Window View" ? "🪟" : "🥣"}</div>
-            <h3 className="mt-2 font-black">{name}</h3>
-            <p className="text-sm font-extrabold text-pookie-muted">Coming soon</p>
+        {["Cloud bed", "Pink lamp", "Tiny plant", "Window view", "Velvet rug"].map((name) => (
+          <div key={name} className="rounded-[24px] border border-pookie-border bg-white/75 p-4">
+            <div className="h-10 w-10 rounded-2xl bg-[#FAFAF7]" />
+            <h3 className="mt-3 font-semibold">{name}</h3>
+            <p className="text-sm text-pookie-muted">Locked</p>
           </div>
         ))}
       </div>
@@ -660,37 +721,37 @@ function Rewards({
 }) {
   return (
     <section>
-      <TopBar title="Free Plus Challenge" />
-      <h1 className="mt-6 text-4xl font-black leading-tight">Make Save Pookie free</h1>
-      <p className="mt-3 text-lg font-bold leading-7 text-pookie-muted">
-        Share your Pookie journey. Get views. Invite friends. Unlock free months.
+      <TopBar title="Free Plus" />
+      <h1 className="mt-6 text-4xl font-bold leading-tight tracking-[-0.04em]">Earn free months</h1>
+      <p className="mt-3 text-base leading-6 text-pookie-muted">
+        Invite friends and complete monthly challenges to earn free months.
       </p>
-      <div className="mt-6 rounded-[32px] bg-pookie-purple p-5 text-white shadow-soft">
-        <p className="text-sm font-black opacity-80">Referral progress</p>
-        <h2 className="mt-2 text-3xl font-black">0 / 3 friends invited</h2>
+      <div className="glass-card mt-6 rounded-[32px] border border-white p-5 shadow-soft">
+        <p className="text-sm font-medium text-pookie-muted">Referral progress</p>
+        <h2 className="mt-2 text-3xl font-bold tracking-[-0.04em]">0 / 3 friends invited</h2>
         <div className="mt-4 h-4 rounded-full bg-white/25">
           <div className="h-4 w-0 rounded-full bg-pookie-yellow" />
         </div>
-        <p className="mt-3 font-black">Reward: 1 free month</p>
+        <p className="mt-3 font-semibold">Reward: 1 free month</p>
       </div>
-      <div className="mt-4 rounded-[32px] bg-white p-5 shadow-soft">
+      <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
         <div className="flex items-start gap-4">
-          <span className="text-4xl">🎥</span>
+          <span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#FAFAF7] text-lg">▣</span>
           <div>
-            <h2 className="text-2xl font-black">Post your Pookie room on TikTok</h2>
-            <p className="mt-2 font-extrabold text-pookie-muted">
+            <h2 className="text-xl font-semibold">TikTok room challenge</h2>
+            <p className="mt-2 text-sm leading-5 text-pookie-muted">
               Tag @savepookie. Get 1,000 views to enter the monthly refund draw.
             </p>
-            <p className="mt-3 rounded-2xl bg-[#FFF7FB] p-3 text-sm font-black text-pookie-muted">
+            <p className="mt-3 rounded-2xl bg-[#FAFAF7] p-3 text-sm font-medium text-pookie-muted">
               View milestones unlock reward eligibility. No guaranteed cash refunds.
             </p>
           </div>
         </div>
       </div>
-      <div className="mt-4 rounded-[32px] bg-white p-5 shadow-soft">
-        <h2 className="text-2xl font-black">Invite rewards</h2>
-        <p className="mt-3 font-extrabold text-pookie-muted">Invite 3 friends → get 1 free month</p>
-        <p className="mt-2 font-extrabold text-pookie-muted">Invite 10 friends → get 1 year free</p>
+      <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
+        <h2 className="text-xl font-semibold">Invite rewards</h2>
+        <p className="mt-3 text-sm text-pookie-muted">Invite 3 friends: get 1 free month</p>
+        <p className="mt-2 text-sm text-pookie-muted">Invite 10 friends: get 1 year free</p>
       </div>
       <div className="mt-6 grid grid-cols-2 gap-3">
         <SecondaryButton onClick={onCopy}>{copied ? "Copied" : "Copy invite link"}</SecondaryButton>
@@ -702,28 +763,28 @@ function Rewards({
 
 function Subscription({ onTrial, onFree }: { onTrial: () => void; onFree: () => void }) {
   const features = [
-    "Unlimited bank insights",
-    "Full Pookie room upgrades",
-    "Custom saving challenges",
+    "Unlimited spending insights",
+    "Smart saving challenges",
     "Subscription leak detector",
+    "Full Pookie room",
     "Free month challenges"
   ];
   return (
     <section>
       <TopBar title="Save Pookie Plus" />
-      <div className="mt-6 rounded-[38px] bg-pookie-ink p-6 text-white shadow-soft">
-        <p className="text-sm font-black uppercase tracking-[0.18em] text-pookie-mint">Plus</p>
-        <h1 className="mt-3 text-4xl font-black">Save Pookie Plus</h1>
+      <div className="glass-card mt-6 rounded-[34px] border border-white p-6 shadow-soft">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-pookie-muted">Plus</p>
+        <h1 className="mt-3 text-4xl font-bold tracking-[-0.05em]">Save Pookie Plus</h1>
         <div className="mt-5 flex items-end gap-2">
-          <span className="text-5xl font-black">EUR 4.99</span>
-          <span className="pb-2 font-black opacity-75">/month</span>
+          <span className="text-5xl font-bold tracking-[-0.06em]">€4.99</span>
+          <span className="pb-2 font-medium text-pookie-muted">/month</span>
         </div>
       </div>
-      <div className="mt-5 rounded-[32px] bg-white p-5 shadow-soft">
+      <div className="mt-5 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
         {features.map((feature) => (
           <div key={feature} className="flex items-center gap-3 border-b border-[#F4E8F3] py-4 last:border-0">
-            <span className="grid h-8 w-8 place-items-center rounded-full bg-pookie-mint font-black">✓</span>
-            <span className="font-black">{feature}</span>
+            <span className="grid h-8 w-8 place-items-center rounded-full bg-pookie-mint/50 font-semibold">✓</span>
+            <span className="font-medium">{feature}</span>
           </div>
         ))}
       </div>
@@ -731,6 +792,7 @@ function Subscription({ onTrial, onFree }: { onTrial: () => void; onFree: () => 
         <PrimaryButton onClick={onTrial}>Start free trial</PrimaryButton>
         <SecondaryButton onClick={onFree}>Continue free</SecondaryButton>
       </div>
+      <p className="mt-4 text-center text-sm text-pookie-muted">Cancel anytime. Demo mode available.</p>
     </section>
   );
 }
@@ -751,10 +813,12 @@ function Profile({
   return (
     <section>
       <TopBar title="Profile" />
-      <div className="mt-6 rounded-[36px] bg-white p-6 text-center shadow-soft">
-        <div className="mx-auto grid h-24 w-24 place-items-center rounded-full bg-[#FFE4F3] text-5xl">👩‍💻</div>
-        <h1 className="mt-4 text-3xl font-black">Demo bestie</h1>
-        <p className="mt-1 font-extrabold text-pookie-muted">Demo mode</p>
+      <div className="mt-6 rounded-[32px] border border-pookie-border bg-white p-6 text-center shadow-soft">
+        <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-[#FAFAF7]">
+          <PookieAvatar />
+        </div>
+        <h1 className="mt-4 text-2xl font-bold tracking-[-0.03em]">Demo account</h1>
+        <p className="mt-1 text-sm text-pookie-muted">Read-only demo mode</p>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3">
         <Insight title="Monthly saving goal" value={`EUR ${monthlyGoal}`} />
@@ -762,11 +826,11 @@ function Profile({
         <Insight title="Verified savings" value={`EUR ${verifiedSavings}`} />
         <Insight title="Bills scanned" value={`${scannedBills}`} />
       </div>
-      <div className="mt-4 rounded-[32px] bg-white p-2 shadow-soft">
+      <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-2 shadow-soft">
         {["Settings", "Data privacy", "Delete account", `${coins} demo coins`].map((item) => (
           <button
             key={item}
-            className="flex w-full items-center justify-between rounded-[24px] px-4 py-4 text-left font-black"
+            className="flex w-full items-center justify-between rounded-[22px] px-4 py-4 text-left font-medium"
           >
             <span>{item}</span>
             <span className="text-pookie-muted">›</span>
@@ -779,7 +843,7 @@ function Profile({
 
 function BottomNav({ active, onChange }: { active: Screen; onChange: (screen: Screen) => void }) {
   return (
-    <nav className="absolute inset-x-4 bottom-4 rounded-[30px] bg-white/92 p-2 shadow-soft backdrop-blur">
+    <nav className="absolute inset-x-4 bottom-4 rounded-[30px] border border-pookie-border bg-white/92 p-2 shadow-soft backdrop-blur">
       <div className="grid grid-cols-6 gap-1">
         {navItems.map((item) => {
           const selected = active === item.screen;
@@ -788,7 +852,7 @@ function BottomNav({ active, onChange }: { active: Screen; onChange: (screen: Sc
               key={item.screen}
               onClick={() => onChange(item.screen)}
               className={`rounded-[20px] px-1 py-3 text-center transition ${
-                selected ? "bg-pookie-pink text-white" : "text-pookie-muted"
+                selected ? "bg-pookie-ink text-white" : "text-pookie-muted"
               }`}
             >
               <span className="block text-lg leading-none">{item.icon}</span>
@@ -866,8 +930,8 @@ function AnimeRoomScene({ compact = false }: { compact?: boolean }) {
 
 function BrandPill() {
   return (
-    <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-3 text-lg font-black shadow-soft">
-      <span>🐱</span>
+    <div className="inline-flex items-center gap-2 rounded-full border border-pookie-border bg-white px-4 py-3 text-sm font-semibold shadow-soft">
+      <PookieAvatar size="tiny" />
       <span>Save Pookie</span>
     </div>
   );
@@ -876,8 +940,8 @@ function BrandPill() {
 function TopBar({ title, compact = false }: { title: string; compact?: boolean }) {
   return (
     <div className={`flex items-center gap-2 ${compact ? "" : "justify-between"}`}>
-      <div className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-3 font-black shadow-soft">
-        <span>🐱</span>
+      <div className="inline-flex items-center gap-2 rounded-full border border-pookie-border bg-white px-4 py-3 text-sm font-semibold shadow-soft">
+        <PookieAvatar size="tiny" />
         <span>{title}</span>
       </div>
     </div>
@@ -897,7 +961,7 @@ function PrimaryButton({
     <button
       onClick={onClick}
       disabled={disabled}
-      className="w-full rounded-full bg-pookie-ink px-5 py-5 text-center text-lg font-black text-white shadow-button transition active:translate-y-1 active:shadow-none disabled:bg-[#CDBDCD] disabled:shadow-none"
+      className="w-full rounded-full bg-pookie-ink px-5 py-4 text-center text-base font-semibold text-white shadow-button transition active:scale-[0.99] disabled:bg-[#CDBDCD] disabled:shadow-none"
     >
       {children}
     </button>
@@ -908,7 +972,7 @@ function SecondaryButton({ children, onClick }: { children: React.ReactNode; onC
   return (
     <button
       onClick={onClick}
-      className="w-full rounded-full border-2 border-pookie-ink bg-white px-4 py-4 text-center text-base font-black text-pookie-ink"
+      className="w-full rounded-full border border-pookie-border bg-white px-4 py-4 text-center text-base font-semibold text-pookie-ink shadow-soft"
     >
       {children}
     </button>
@@ -918,7 +982,7 @@ function SecondaryButton({ children, onClick }: { children: React.ReactNode; onC
 function StatBar({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <div className="mt-4">
-      <div className="mb-2 flex justify-between text-xs font-black text-pookie-muted">
+      <div className="mb-2 flex justify-between text-xs font-medium text-pookie-muted">
         <span>{label}</span>
         <span>{value}%</span>
       </div>
@@ -931,18 +995,50 @@ function StatBar({ label, value, color }: { label: string; value: number; color:
 
 function MiniCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-[28px] bg-white p-4 shadow-soft">
-      <p className="text-3xl">{value}</p>
-      <p className="mt-2 text-sm font-black leading-4">{label}</p>
+    <div className="rounded-[24px] border border-pookie-border bg-white p-4 shadow-soft">
+      <p className="text-2xl font-bold tracking-[-0.03em]">{value}</p>
+      <p className="mt-2 text-sm font-medium leading-4 text-pookie-muted">{label}</p>
     </div>
   );
 }
 
 function Insight({ title, value }: { title: string; value: string }) {
   return (
-    <div className="rounded-[26px] bg-white p-4 shadow-soft">
-      <p className="text-xs font-black uppercase leading-4 text-pookie-muted">{title}</p>
-      <p className="mt-2 text-xl font-black leading-6">{value}</p>
+    <div className="rounded-[24px] border border-pookie-border bg-white p-4 shadow-soft">
+      <p className="text-xs font-medium uppercase leading-4 text-pookie-muted">{title}</p>
+      <p className="mt-2 text-xl font-bold leading-6 tracking-[-0.03em]">{value}</p>
+    </div>
+  );
+}
+
+function Metric({ label, value, trend, danger = false }: { label: string; value: string; trend: string; danger?: boolean }) {
+  return (
+    <div className="rounded-2xl bg-white/70 p-3">
+      <p className="text-xs text-pookie-muted">{label}</p>
+      <p className="mt-1 text-base font-bold tracking-[-0.02em]">{value}</p>
+      <p className={`mt-1 text-[0.68rem] font-medium ${danger ? "text-pookie-danger" : "text-pookie-success"}`}>
+        {trend}
+      </p>
+    </div>
+  );
+}
+
+function PookieAvatar({ size = "default" }: { size?: "tiny" | "small" | "default" | "large" }) {
+  const dimensions = {
+    tiny: "h-5 w-5",
+    small: "h-8 w-8",
+    default: "h-12 w-12",
+    large: "h-28 w-28"
+  }[size];
+
+  return (
+    <div className={`cat-face ${dimensions} rounded-full`}>
+      <div className="absolute left-[28%] top-[42%] h-1.5 w-1.5 rounded-full bg-pookie-ink" />
+      <div className="absolute right-[28%] top-[42%] h-1.5 w-1.5 rounded-full bg-pookie-ink" />
+      <div className="absolute left-1/2 top-[57%] h-1.5 w-2 -translate-x-1/2 rounded-full bg-[#F7A8C8]" />
+      {size === "large" ? (
+        <div className="absolute -right-2 top-3 h-5 w-12 rotate-[-8deg] rounded-full bg-pookie-pink" />
+      ) : null}
     </div>
   );
 }
