@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: #2d2433;
+  background: #fff7fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-nunito), ui-rounded, system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(255, 138, 205, 0.18), transparent 26rem),
+    radial-gradient(circle at 86% 5%, rgba(142, 240, 194, 0.18), transparent 24rem),
+    linear-gradient(135deg, #fff7fb 0%, #f6ecff 48%, #fdf2f7 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.phone-scroll {
+  scrollbar-width: none;
+}
+
+.phone-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.floaty {
+  animation: floaty 4s ease-in-out infinite;
+}
+
+.pop {
+  animation: pop 180ms ease-out;
+}
