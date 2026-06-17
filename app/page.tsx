@@ -23,11 +23,28 @@ type Upgrade = {
 };
 
 const categories = [
-  { name: "Food & cafes", amount: 82, trend: "12% lower than usual", color: "bg-pookie-pink" },
-  { name: "Shopping", amount: 76, trend: "EUR 18 over plan", color: "bg-pookie-purple" },
-  { name: "Transport", amount: 31, trend: "on track", color: "bg-pookie-mint" },
-  { name: "Subscriptions", amount: 38, trend: "one price increase", color: "bg-pookie-yellow" },
-  { name: "Other", amount: 25, trend: "steady", color: "bg-pookie-danger" }
+  { name: "Food & cafes", amount: 82, trend: "12% lower than usual", color: "bg-pookie-pink", icon: "☕" },
+  { name: "Shopping", amount: 76, trend: "EUR 18 over plan", color: "bg-pookie-purple", icon: "□" },
+  { name: "Transport", amount: 31, trend: "on track", color: "bg-pookie-mint", icon: "↗" },
+  { name: "Subscriptions", amount: 38, trend: "one price increase", color: "bg-pookie-yellow", icon: "≡" },
+  { name: "Other", amount: 25, trend: "steady", color: "bg-pookie-danger", icon: "•" }
+];
+
+const weekSpend = [34, 28, 42, 31, 26, 22, 31];
+const calendarDays = [
+  { day: "M", amount: 34 },
+  { day: "T", amount: 28 },
+  { day: "W", amount: 42 },
+  { day: "T", amount: 31 },
+  { day: "F", amount: 26 },
+  { day: "S", amount: 22 },
+  { day: "S", amount: 31 }
+];
+
+const earnIdeas = [
+  { title: "Sell one unused item", value: "Est. €25", note: "List it this week" },
+  { title: "Invite 3 friends", value: "1 free month", note: "Reward eligible" },
+  { title: "Creator room post", value: "Refund draw", note: "Monthly entry" }
 ];
 
 const suggestions = [
@@ -61,9 +78,8 @@ const navItems: { screen: Screen; label: string; icon: string }[] = [
   { screen: "home", label: "Home", icon: "⌂" },
   { screen: "scan", label: "Scan", icon: "▣" },
   { screen: "spending", label: "Spend", icon: "◷" },
-  { screen: "room", label: "Pookie", icon: "🐱" },
-  { screen: "rewards", label: "Rewards", icon: "✦" },
-  { screen: "profile", label: "Profile", icon: "♡" }
+  { screen: "rewards", label: "Earn", icon: "€" },
+  { screen: "room", label: "Room", icon: "⌂" }
 ];
 
 export default function App() {
@@ -139,7 +155,10 @@ export default function App() {
             onCheck={() => setScreen("check")}
             onScan={() => setScreen("scan")}
             onSuggestions={() => setScreen("suggestions")}
+            onEarn={() => setScreen("rewards")}
+            onRoom={() => setScreen("room")}
             onPlus={() => setScreen("subscription")}
+            onProfile={() => setScreen("profile")}
             onVerify={() => verifySaving(5)}
           />
         );
@@ -298,7 +317,10 @@ function Home({
   onCheck,
   onScan,
   onSuggestions,
+  onEarn,
+  onRoom,
   onPlus,
+  onProfile,
   onVerify
 }: {
   progress: number;
@@ -312,7 +334,10 @@ function Home({
   onCheck: () => void;
   onScan: () => void;
   onSuggestions: () => void;
+  onEarn: () => void;
+  onRoom: () => void;
   onPlus: () => void;
+  onProfile: () => void;
   onVerify: () => void;
 }) {
   return (
@@ -328,10 +353,11 @@ function Home({
           </div>
         </div>
         <button
-          onClick={onPlus}
+          onClick={onProfile}
           className="grid h-11 w-11 place-items-center rounded-full border border-pookie-border bg-white text-lg shadow-soft"
+          aria-label="Open profile"
         >
-          ◦
+          <PookieAvatar size="small" />
         </button>
       </div>
       <div className="glass-card mt-6 rounded-[34px] border border-white p-6 shadow-soft">
@@ -347,6 +373,18 @@ function Home({
             stable
           </span>
         </div>
+      </div>
+      <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-pookie-muted">7-day spending</p>
+            <h2 className="mt-1 text-2xl font-bold tracking-[-0.03em]">€214</h2>
+          </div>
+          <button onClick={onPlus} className="rounded-full bg-[#FAFAF7] px-3 py-2 text-xs font-semibold">
+            Plus
+          </button>
+        </div>
+        <MiniBarChart values={weekSpend} />
       </div>
       <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
         <div className="flex gap-4">
@@ -367,11 +405,11 @@ function Home({
         <h2 className="text-base font-semibold tracking-[-0.01em]">Quick access</h2>
         <div className="mt-4 grid grid-cols-5 gap-2">
           {[
-            ["Budget", "□", onSuggestions],
+            ["Scan", "▣", onScan],
             ["Check", "✓", onCheck],
-            ["Goals", "◎", onVerify],
-            ["Subs", "≡", onSuggestions],
-            ["Room", "⌂", onScan]
+            ["Spend", "◷", onSuggestions],
+            ["Earn", "€", onEarn],
+            ["Room", "⌂", onRoom]
           ].map(([label, icon, action]) => (
             <button
               key={label as string}
@@ -403,8 +441,8 @@ function Home({
         </div>
       </div>
       <div className="mt-5 grid grid-cols-2 gap-3">
-        <SecondaryButton onClick={onScan}>Scan bill</SecondaryButton>
-        <PrimaryButton onClick={onVerify}>Verify €5</PrimaryButton>
+        <PrimaryButton onClick={onScan}>Scan bill</PrimaryButton>
+        <SecondaryButton onClick={onVerify}>Verify €5</SecondaryButton>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3">
         <MiniCard label="Pending savings" value={`€${pendingSavings}`} />
@@ -551,7 +589,7 @@ function Spending({ onSuggestions }: { onSuggestions: () => void }) {
   return (
     <section>
       <TopBar title="Spending" />
-      <h1 className="mt-6 text-4xl font-bold tracking-[-0.04em]">Weekly overview</h1>
+      <h1 className="mt-6 text-4xl font-bold tracking-[-0.04em]">Spend analytics</h1>
       <div className="glass-card mt-5 rounded-[34px] border border-white p-5 shadow-soft">
         <p className="text-sm font-medium text-pookie-muted">Total spent this week</p>
         <h2 className="mt-2 text-5xl font-bold tracking-[-0.06em]">€214</h2>
@@ -560,6 +598,32 @@ function Spending({ onSuggestions }: { onSuggestions: () => void }) {
           <Metric label="Expenses" value="€214" trend="-12%" danger />
           <Metric label="Savings" value="€182" trend="on track" />
         </div>
+      </div>
+      <div className="mt-4 grid grid-cols-[0.9fr_1.1fr] gap-3">
+        <div className="rounded-[28px] border border-pookie-border bg-white p-4 shadow-soft">
+          <p className="text-sm font-medium text-pookie-muted">Category mix</p>
+          <DonutChart />
+          <p className="mt-2 text-center text-xs text-pookie-muted">Food leads spend</p>
+        </div>
+        <div className="rounded-[28px] border border-pookie-border bg-white p-4 shadow-soft">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-pookie-muted">Calendar</p>
+            <p className="text-xs font-semibold text-pookie-success">under avg</p>
+          </div>
+          <SpendCalendar />
+        </div>
+      </div>
+      <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-pookie-muted">Daily trend</p>
+            <h2 className="mt-1 text-2xl font-bold tracking-[-0.03em]">12% lower</h2>
+          </div>
+          <span className="rounded-full bg-pookie-success/15 px-3 py-2 text-xs font-semibold text-pookie-success">
+            good
+          </span>
+        </div>
+        <MiniBarChart values={weekSpend} />
       </div>
       <div className="mt-4 rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
         <div className="flex gap-3">
@@ -721,11 +785,26 @@ function Rewards({
 }) {
   return (
     <section>
-      <TopBar title="Free Plus" />
-      <h1 className="mt-6 text-4xl font-bold leading-tight tracking-[-0.04em]">Earn free months</h1>
+      <TopBar title="Earn" />
+      <h1 className="mt-6 text-4xl font-bold leading-tight tracking-[-0.04em]">Earn, save, repeat</h1>
       <p className="mt-3 text-base leading-6 text-pookie-muted">
-        Invite friends and complete monthly challenges to earn free months.
+        Simple ways to make or unlock value inside Save Pookie. No guaranteed income.
       </p>
+      <div className="mt-6 space-y-3">
+        {earnIdeas.map((idea) => (
+          <div key={idea.title} className="rounded-[28px] border border-pookie-border bg-white p-5 shadow-soft">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h2 className="font-semibold">{idea.title}</h2>
+                <p className="mt-1 text-sm text-pookie-muted">{idea.note}</p>
+              </div>
+              <span className="rounded-full bg-[#FAFAF7] px-3 py-2 text-sm font-semibold">
+                {idea.value}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
       <div className="glass-card mt-6 rounded-[32px] border border-white p-5 shadow-soft">
         <p className="text-sm font-medium text-pookie-muted">Referral progress</p>
         <h2 className="mt-2 text-3xl font-bold tracking-[-0.04em]">0 / 3 friends invited</h2>
@@ -844,7 +923,7 @@ function Profile({
 function BottomNav({ active, onChange }: { active: Screen; onChange: (screen: Screen) => void }) {
   return (
     <nav className="absolute inset-x-4 bottom-4 rounded-[30px] border border-pookie-border bg-white/92 p-2 shadow-soft backdrop-blur">
-      <div className="grid grid-cols-6 gap-1">
+      <div className="grid grid-cols-5 gap-1">
         {navItems.map((item) => {
           const selected = active === item.screen;
           return (
@@ -1019,6 +1098,64 @@ function Metric({ label, value, trend, danger = false }: { label: string; value:
       <p className={`mt-1 text-[0.68rem] font-medium ${danger ? "text-pookie-danger" : "text-pookie-success"}`}>
         {trend}
       </p>
+    </div>
+  );
+}
+
+function MiniBarChart({ values }: { values: number[] }) {
+  const max = Math.max(...values);
+
+  return (
+    <div className="mt-5 flex h-24 items-end gap-2">
+      {values.map((value, index) => (
+        <div key={`${value}-${index}`} className="flex flex-1 flex-col items-center gap-2">
+          <div className="flex h-20 w-full items-end rounded-full bg-[#F3F3EE]">
+            <div
+              className="w-full rounded-full bg-pookie-purple"
+              style={{ height: `${Math.max(18, (value / max) * 100)}%` }}
+            />
+          </div>
+          <span className="text-[0.62rem] font-medium text-pookie-muted">
+            {["M", "T", "W", "T", "F", "S", "S"][index]}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function DonutChart() {
+  return (
+    <div className="mx-auto mt-5 grid h-28 w-28 place-items-center rounded-full bg-[conic-gradient(#F7A8C8_0_34%,#A88CFF_34%_66%,#BFE7FF_66%_79%,#F6C85F_79%_91%,#FF6F91_91%_100%)]">
+      <div className="grid h-16 w-16 place-items-center rounded-full bg-white">
+        <span className="text-sm font-bold">€214</span>
+      </div>
+    </div>
+  );
+}
+
+function SpendCalendar() {
+  const max = Math.max(...calendarDays.map((item) => item.amount));
+
+  return (
+    <div className="mt-4 grid grid-cols-7 gap-1.5">
+      {calendarDays.map((item, index) => {
+        const intensity = item.amount / max;
+        return (
+          <div key={`${item.day}-${index}`} className="text-center">
+            <div
+              className="grid aspect-square place-items-center rounded-2xl text-xs font-semibold"
+              style={{
+                backgroundColor: `rgba(168, 140, 255, ${0.14 + intensity * 0.34})`,
+                color: intensity > 0.8 ? "#1F1F1F" : "#8A8A8A"
+              }}
+            >
+              €{item.amount}
+            </div>
+            <p className="mt-2 text-[0.62rem] font-medium text-pookie-muted">{item.day}</p>
+          </div>
+        );
+      })}
     </div>
   );
 }
