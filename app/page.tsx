@@ -6,6 +6,7 @@ type Screen =
   | "onboarding"
   | "bank"
   | "home"
+  | "scan"
   | "check"
   | "spending"
   | "suggestions"
@@ -58,7 +59,8 @@ const suggestions = [
 
 const navItems: { screen: Screen; label: string; icon: string }[] = [
   { screen: "home", label: "Home", icon: "⌂" },
-  { screen: "spending", label: "Spending", icon: "◷" },
+  { screen: "scan", label: "Scan", icon: "▣" },
+  { screen: "spending", label: "Spend", icon: "◷" },
   { screen: "room", label: "Pookie", icon: "🐱" },
   { screen: "rewards", label: "Rewards", icon: "✦" },
   { screen: "profile", label: "Profile", icon: "♡" }
@@ -69,6 +71,9 @@ export default function App() {
   const [coins, setCoins] = useState(140);
   const [xp, setXp] = useState(0);
   const [savedThisMonth, setSavedThisMonth] = useState(182);
+  const [verifiedSavings, setVerifiedSavings] = useState(182);
+  const [pendingSavings, setPendingSavings] = useState(5);
+  const [scannedBills, setScannedBills] = useState(2);
   const [showReward, setShowReward] = useState(false);
   const [checkAnswers, setCheckAnswers] = useState<Record<number, string>>({});
   const [inviteCopied, setInviteCopied] = useState(false);
@@ -90,7 +95,20 @@ export default function App() {
     setShowReward(true);
     setXp((current) => current + 10);
     setCoins((current) => current + 12);
-    setSavedThisMonth((current) => Math.min(monthlyGoal, current + 5));
+    setPendingSavings((current) => current + 5);
+  };
+
+  const verifySaving = (amount: number) => {
+    setSavedThisMonth((current) => Math.min(monthlyGoal, current + amount));
+    setVerifiedSavings((current) => Math.min(monthlyGoal, current + amount));
+    setPendingSavings((current) => Math.max(0, current - amount));
+    setCoins((current) => current + amount * 2);
+  };
+
+  const scanBill = () => {
+    setScannedBills((current) => current + 1);
+    setPendingSavings((current) => current + 3);
+    setCoins((current) => current + 6);
   };
 
   const buyUpgrade = useCallback((name: string, cost: number) => {
@@ -115,11 +133,18 @@ export default function App() {
             monthlyGoal={monthlyGoal}
             coins={coins}
             xp={xp}
+            verifiedSavings={verifiedSavings}
+            pendingSavings={pendingSavings}
+            scannedBills={scannedBills}
             onCheck={() => setScreen("check")}
+            onScan={() => setScreen("scan")}
             onSuggestions={() => setScreen("suggestions")}
             onPlus={() => setScreen("subscription")}
+            onVerify={() => verifySaving(5)}
           />
         );
+      case "scan":
+        return <Scanner scannedBills={scannedBills} onScan={scanBill} onVerify={() => verifySaving(3)} />;
       case "check":
         return (
           <DailyCheck
@@ -153,15 +178,23 @@ export default function App() {
       case "subscription":
         return <Subscription onTrial={() => setScreen("home")} onFree={() => setScreen("home")} />;
       case "profile":
-        return <Profile savedThisMonth={savedThisMonth} monthlyGoal={monthlyGoal} coins={coins} />;
+        return (
+          <Profile
+            savedThisMonth={savedThisMonth}
+            monthlyGoal={monthlyGoal}
+            coins={coins}
+            verifiedSavings={verifiedSavings}
+            scannedBills={scannedBills}
+          />
+        );
       default:
         return null;
     }
-  }, [screen, progress, savedThisMonth, coins, xp, checkAnswers, showReward, inviteCopied, upgrades, buyUpgrade]);
+  }, [screen, progress, savedThisMonth, coins, xp, verifiedSavings, pendingSavings, scannedBills, checkAnswers, showReward, inviteCopied, upgrades, buyUpgrade]);
 
   return (
     <main className="min-h-screen bg-pookie-bg text-pookie-text sm:grid sm:place-items-center sm:p-6">
-      <div className="relative min-h-screen w-full overflow-hidden bg-pookie-bg shadow-soft sm:min-h-[844px] sm:w-[390px] sm:rounded-[42px] sm:border-[10px] sm:border-white">
+      <div className="relative min-h-screen w-full overflow-hidden bg-pookie-bg shadow-soft sm:min-h-[844px] sm:w-[390px] sm:rounded-[42px] sm:border-[10px] sm:border-[#fff8ef]">
         <div
           className={`phone-scroll h-screen overflow-y-auto px-5 pb-6 pt-5 sm:h-[824px] ${
             hasBottomNav ? "pb-44" : ""
@@ -180,22 +213,14 @@ function Onboarding({ onStart }: { onStart: () => void }) {
     <section className="flex min-h-[calc(100vh-2.5rem)] flex-col justify-between sm:min-h-[780px]">
       <div>
         <BrandPill />
-        <div className="mt-8 rounded-[38px] bg-gradient-to-br from-pookie-pink via-pookie-purple to-pookie-mint p-1 shadow-soft">
-          <div className="rounded-[34px] bg-white/82 p-8 text-center">
-            <div className="mx-auto grid h-48 w-48 place-items-center rounded-full bg-[#FFE4F3] shadow-inner">
-              <div className="floaty text-[6.5rem] drop-shadow-sm">🐱</div>
-            </div>
-            <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-pookie-yellow px-4 py-2 text-sm font-black">
-              Level 2 snack guardian
-            </div>
-          </div>
+        <div className="mt-8 overflow-hidden rounded-[34px] border-2 border-[#3C2B24] bg-[#f7c986] shadow-soft">
+          <AnimeRoomScene compact />
         </div>
         <h1 className="mt-8 text-[3rem] font-black leading-[0.95] tracking-normal">
-          Save money. Keep Pookie alive.
+          Save money. Make Pookie cozy.
         </h1>
         <p className="mt-4 text-lg font-bold leading-7 text-pookie-muted">
-          Your cute money cat helps you understand spending, save more, and unlock cozy room
-          upgrades.
+          Scan bills, move money into savings, and unlock a warm little anime room for your money cat.
         </p>
       </div>
       <div className="mt-8">
@@ -212,9 +237,9 @@ function BankConnect({ onDemo }: { onDemo: () => void }) {
   return (
     <section>
       <TopBar title="Demo setup" />
-      <h1 className="mt-7 text-4xl font-black leading-tight">Connect your bank</h1>
+      <h1 className="mt-7 text-4xl font-black leading-tight">How Pookie knows you saved</h1>
       <p className="mt-3 text-lg font-bold leading-7 text-pookie-muted">
-        Pookie analyzes your spending and finds easy ways to save.
+        Real savings should be counted when money moves, not when you tap a cute button.
       </p>
       <div className="mt-8 rounded-[32px] bg-pookie-ink p-6 text-white shadow-soft">
         <div className="flex items-start justify-between">
@@ -222,17 +247,19 @@ function BankConnect({ onDemo }: { onDemo: () => void }) {
             <p className="text-sm font-black uppercase tracking-[0.18em] text-pookie-mint">
               Coming soon
             </p>
-            <h2 className="mt-3 text-2xl font-black">Bank connection</h2>
+            <h2 className="mt-3 text-2xl font-black">Read-only bank check</h2>
           </div>
           <span className="grid h-14 w-14 place-items-center rounded-2xl bg-white/12 text-3xl">🏦</span>
         </div>
-        <p className="mt-8 text-lg font-extrabold">For now we use demo spending data</p>
+        <p className="mt-8 text-lg font-extrabold">
+          Pookie verifies transfers to savings, lower balances on bills, and receipt scans.
+        </p>
         <div className="mt-5 h-3 rounded-full bg-white/16">
           <div className="h-3 w-2/3 rounded-full bg-pookie-pink" />
         </div>
       </div>
       <div className="mt-5 grid grid-cols-3 gap-3">
-        {["Read-only access", "Encrypted", "You stay in control"].map((item) => (
+        {["Read-only access", "Transfer detected", "Demo mode now"].map((item) => (
           <div key={item} className="rounded-3xl bg-white p-3 text-center shadow-soft">
             <div className="mx-auto mb-2 grid h-9 w-9 place-items-center rounded-full bg-pookie-mint/45">
               ✓
@@ -242,7 +269,7 @@ function BankConnect({ onDemo }: { onDemo: () => void }) {
         ))}
       </div>
       <div className="mt-10">
-        <PrimaryButton onClick={onDemo}>Use demo mode</PrimaryButton>
+        <PrimaryButton onClick={onDemo}>Use demo verification</PrimaryButton>
       </div>
     </section>
   );
@@ -252,20 +279,29 @@ function Home({
   progress,
   savedThisMonth,
   monthlyGoal,
-  coins,
   xp,
+  verifiedSavings,
+  pendingSavings,
+  scannedBills,
   onCheck,
+  onScan,
   onSuggestions,
-  onPlus
+  onPlus,
+  onVerify
 }: {
   progress: number;
   savedThisMonth: number;
   monthlyGoal: number;
   coins: number;
   xp: number;
+  verifiedSavings: number;
+  pendingSavings: number;
+  scannedBills: number;
   onCheck: () => void;
+  onScan: () => void;
   onSuggestions: () => void;
   onPlus: () => void;
+  onVerify: () => void;
 }) {
   return (
     <section>
@@ -281,27 +317,30 @@ function Home({
           Plus
         </button>
       </div>
-      <div className="mt-5 rounded-[36px] bg-white p-5 shadow-soft">
+      <div className="mt-5 overflow-hidden rounded-[34px] border-2 border-[#3C2B24] bg-[#f7c986] shadow-soft">
+        <AnimeRoomScene compact />
+      </div>
+      <div className="mt-4 rounded-[28px] bg-white p-5 shadow-soft">
         <div className="flex gap-4">
-          <div className="grid h-32 w-32 shrink-0 place-items-center rounded-[32px] bg-[#FFE4F3]">
-            <div className="floaty text-7xl">🐱</div>
+          <div className="grid h-24 w-24 shrink-0 place-items-center rounded-[28px] bg-[#FFE7C2]">
+            <div className="floaty text-6xl">🐱</div>
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-sm font-black text-pookie-muted">Pookie</p>
-            <h2 className="mt-1 text-2xl font-black leading-7">Happy but wants snacks</h2>
+            <h2 className="mt-1 text-2xl font-black leading-7">Cozy because EUR {verifiedSavings} is verified</h2>
             <StatBar label="Happiness" value={86} color="bg-pookie-pink" />
             <StatBar label="Energy" value={72} color="bg-pookie-mint" />
           </div>
         </div>
       </div>
-      <div className="mt-4 rounded-[32px] bg-pookie-purple p-5 text-white shadow-soft">
+      <div className="mt-4 rounded-[32px] bg-[#5f463a] p-5 text-white shadow-soft">
         <div className="flex items-end justify-between">
           <div>
-            <p className="font-black opacity-80">Monthly goal</p>
+            <p className="font-black opacity-80">Verified saved this month</p>
             <h2 className="mt-1 text-4xl font-black">EUR {savedThisMonth}</h2>
             <p className="mt-1 font-extrabold">Goal: EUR {monthlyGoal}</p>
           </div>
-          <div className="rounded-2xl bg-white px-3 py-2 text-sm font-black text-pookie-purple">
+          <div className="rounded-2xl bg-white px-3 py-2 text-sm font-black text-[#5f463a]">
             {progress}%
           </div>
         </div>
@@ -309,12 +348,19 @@ function Home({
           <div className="h-4 rounded-full bg-pookie-yellow" style={{ width: `${progress}%` }} />
         </div>
       </div>
-      <div className="mt-5">
-        <PrimaryButton onClick={onCheck}>Do today&apos;s money check</PrimaryButton>
+      <div className="mt-4 rounded-[28px] bg-[#FFF5DA] p-4 shadow-soft">
+        <p className="text-sm font-black uppercase tracking-[0.12em] text-pookie-muted">Proof logic</p>
+        <p className="mt-2 text-lg font-black leading-6">
+          Pending EUR {pendingSavings} becomes real only after a savings transfer or bill reduction is verified.
+        </p>
+      </div>
+      <div className="mt-5 grid grid-cols-2 gap-3">
+        <PrimaryButton onClick={onScan}>Scan bill</PrimaryButton>
+        <SecondaryButton onClick={onVerify}>Verify EUR 5</SecondaryButton>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3">
         <MiniCard label="5-day saving streak" value="🔥" />
-        <MiniCard label={`${coins} cozy coins`} value="🪙" />
+        <MiniCard label={`${scannedBills} bills scanned`} value="▣" />
       </div>
       <button
         onClick={onSuggestions}
@@ -327,6 +373,56 @@ function Home({
         <span className="text-3xl">✨</span>
       </button>
       <p className="mt-4 text-center text-xs font-black text-pookie-muted">{xp} XP earned in demo mode</p>
+    </section>
+  );
+}
+
+function Scanner({
+  scannedBills,
+  onScan,
+  onVerify
+}: {
+  scannedBills: number;
+  onScan: () => void;
+  onVerify: () => void;
+}) {
+  return (
+    <section>
+      <TopBar title="Bill scanner" />
+      <h1 className="mt-6 text-4xl font-black leading-tight">Scan receipts and bills</h1>
+      <p className="mt-3 text-lg font-bold leading-7 text-pookie-muted">
+        Pookie reads the bill, finds recurring charges, and suggests a concrete saving action.
+      </p>
+      <div className="mt-6 rounded-[34px] border-2 border-[#3C2B24] bg-[#2b211f] p-4 shadow-soft">
+        <div className="relative h-80 overflow-hidden rounded-[26px] bg-gradient-to-b from-[#7b5a43] to-[#201817]">
+          <div className="absolute inset-x-10 top-8 h-64 rotate-[-2deg] rounded-xl bg-[#fff6df] p-5 font-mono text-[0.72rem] leading-5 text-[#2b211f] shadow-soft">
+            <p className="text-center font-black">CITY MARKET</p>
+            <p className="mt-3">Coffee x2 ........ EUR 8.00</p>
+            <p>Snacks ........... EUR 6.40</p>
+            <p>Streaming ........ EUR 12.00</p>
+            <p>Groceries ........ EUR 34.10</p>
+            <p className="mt-3 border-t border-dashed border-[#2b211f] pt-3">TOTAL EUR 60.50</p>
+          </div>
+          <div className="absolute inset-8 rounded-[26px] border-4 border-pookie-pink/80" />
+          <div className="absolute bottom-5 left-1/2 grid h-20 w-20 -translate-x-1/2 place-items-center rounded-full border-4 border-white bg-pookie-pink text-3xl text-white">
+            ▣
+          </div>
+        </div>
+      </div>
+      <div className="mt-4 rounded-[28px] bg-white p-5 shadow-soft">
+        <p className="text-sm font-black text-pookie-muted">Detected from demo scan</p>
+        <h2 className="mt-1 text-2xl font-black">Save EUR 3 by swapping one snack run</h2>
+        <p className="mt-2 font-bold text-pookie-muted">
+          This creates pending savings. Pookie only counts it as saved after the linked bank shows EUR 3 moved to savings.
+        </p>
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <PrimaryButton onClick={onScan}>Scan demo bill</PrimaryButton>
+        <SecondaryButton onClick={onVerify}>Verify EUR 3</SecondaryButton>
+      </div>
+      <p className="mt-4 text-center text-sm font-black text-pookie-muted">
+        {scannedBills} scanned bills in demo mode
+      </p>
     </section>
   );
 }
@@ -345,9 +441,9 @@ function DailyCheck({
   onRewardClose: () => void;
 }) {
   const questions = [
-    { text: "Did you buy coffee today?", answers: ["Yes", "No", "A little"] },
-    { text: "Any impulse shopping?", answers: ["Yes", "No", "A little"] },
-    { text: "Can we move EUR 5 to savings?", answers: ["Save EUR 5", "Not today"] }
+    { text: "Did you review today's spending?", answers: ["Yes", "Not yet"] },
+    { text: "Which leak can we reduce?", answers: ["Coffee", "Snacks", "Shopping"] },
+    { text: "Create a pending EUR 5 saving?", answers: ["Move EUR 5", "Not today"] }
   ];
   const done = Object.keys(answers).length === questions.length;
 
@@ -364,7 +460,9 @@ function DailyCheck({
         <span className="font-black">{Object.keys(answers).length}/3</span>
       </div>
       <h1 className="mt-7 text-4xl font-black leading-tight">Quick money check</h1>
-      <p className="mt-3 font-bold text-pookie-muted">Answer fast. Pookie is ready for coins.</p>
+      <p className="mt-3 font-bold text-pookie-muted">
+        This creates a pending saving. It counts after the transfer is verified.
+      </p>
       <div className="mt-6 space-y-4">
         {questions.map((question, index) => (
           <div key={question.text} className="rounded-[32px] bg-white p-5 shadow-soft">
@@ -509,15 +607,7 @@ function Room({
         <div className="rounded-full bg-pookie-yellow px-4 py-2 text-sm font-black">🪙 {coins}</div>
       </div>
       <div className="mt-5 overflow-hidden rounded-[40px] bg-gradient-to-b from-[#FFE2F3] to-[#DDF9EB] p-5 shadow-soft">
-        <div className="relative h-72 rounded-[32px] bg-[#FFFDFB]">
-          <div className="absolute left-6 top-6 grid h-16 w-16 place-items-center rounded-full bg-pookie-yellow text-3xl">
-            🌙
-          </div>
-          <div className="absolute right-5 top-8 text-4xl">🪴</div>
-          <div className="absolute bottom-10 left-8 h-16 w-44 rounded-[50%] bg-pookie-pink/55" />
-          <div className="absolute bottom-20 left-24 text-[7rem] leading-none">🐱</div>
-          <div className="absolute bottom-4 left-16 h-16 w-56 rounded-t-[36px] bg-pookie-purple/35" />
-        </div>
+        <AnimeRoomScene />
       </div>
       <div className="mt-5 rounded-[30px] bg-white p-5 shadow-soft">
         <p className="text-sm font-black text-pookie-muted">Room level</p>
@@ -648,11 +738,15 @@ function Subscription({ onTrial, onFree }: { onTrial: () => void; onFree: () => 
 function Profile({
   savedThisMonth,
   monthlyGoal,
-  coins
+  coins,
+  verifiedSavings,
+  scannedBills
 }: {
   savedThisMonth: number;
   monthlyGoal: number;
   coins: number;
+  verifiedSavings: number;
+  scannedBills: number;
 }) {
   return (
     <section>
@@ -665,8 +759,8 @@ function Profile({
       <div className="mt-4 grid grid-cols-2 gap-3">
         <Insight title="Monthly saving goal" value={`EUR ${monthlyGoal}`} />
         <Insight title="Saved this month" value={`EUR ${savedThisMonth}`} />
-        <Insight title="Current streak" value="5 days" />
-        <Insight title="Pookie level" value="Level 2" />
+        <Insight title="Verified savings" value={`EUR ${verifiedSavings}`} />
+        <Insight title="Bills scanned" value={`${scannedBills}`} />
       </div>
       <div className="mt-4 rounded-[32px] bg-white p-2 shadow-soft">
         {["Settings", "Data privacy", "Delete account", `${coins} demo coins`].map((item) => (
@@ -686,24 +780,87 @@ function Profile({
 function BottomNav({ active, onChange }: { active: Screen; onChange: (screen: Screen) => void }) {
   return (
     <nav className="absolute inset-x-4 bottom-4 rounded-[30px] bg-white/92 p-2 shadow-soft backdrop-blur">
-      <div className="grid grid-cols-5 gap-1">
+      <div className="grid grid-cols-6 gap-1">
         {navItems.map((item) => {
           const selected = active === item.screen;
           return (
             <button
               key={item.screen}
               onClick={() => onChange(item.screen)}
-              className={`rounded-[22px] px-1 py-3 text-center transition ${
+              className={`rounded-[20px] px-1 py-3 text-center transition ${
                 selected ? "bg-pookie-pink text-white" : "text-pookie-muted"
               }`}
             >
               <span className="block text-lg leading-none">{item.icon}</span>
-              <span className="mt-1 block text-[0.66rem] font-black">{item.label}</span>
+              <span className="mt-1 block text-[0.58rem] font-black">{item.label}</span>
             </button>
           );
         })}
       </div>
     </nav>
+  );
+}
+
+function AnimeRoomScene({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className={`anime-room relative overflow-hidden ${compact ? "h-56" : "h-72"} rounded-[28px]`}>
+      <div className="absolute inset-0 bg-[#f8c987]" />
+      <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#ffc46f] to-[#f3a96c]" />
+      <div className="absolute right-7 top-7 h-28 w-28 rounded-t-[46px] border-4 border-[#6c4635] bg-[#ffd17b]">
+        <div className="absolute inset-3 bg-gradient-to-b from-[#ffdd8e] to-[#d9754e]" />
+        <div className="absolute bottom-4 left-5 h-16 w-4 bg-[#b75c43]" />
+        <div className="absolute bottom-4 left-12 h-20 w-5 bg-[#b75c43]" />
+        <div className="absolute bottom-4 right-5 h-12 w-4 bg-[#b75c43]" />
+      </div>
+      <div className="absolute left-0 top-0 h-full w-full opacity-30">
+        {Array.from({ length: 20 }).map((_, index) => (
+          <span
+            key={index}
+            className="absolute text-sm"
+            style={{
+              left: `${(index * 37) % 100}%`,
+              top: `${(index * 23) % 100}%`
+            }}
+          >
+            🍎
+          </span>
+        ))}
+      </div>
+      <div className="absolute left-5 top-7 h-16 w-28 rounded-lg border-4 border-[#6c4635] bg-[#f3dfb8]">
+        <p className="pt-4 text-center text-sm font-black text-[#6c4635]">SAVINGS</p>
+      </div>
+      <div className="absolute left-6 top-28 h-20 w-28 rounded-t-2xl border-4 border-[#6c4635] bg-[#d9905f]">
+        <div className="absolute -top-9 left-5 h-10 w-16 rounded-t-full border-4 border-b-0 border-[#6c4635] bg-[#efb06d]" />
+      </div>
+      <div className="absolute left-2 bottom-16 h-3 w-44 rounded-full bg-[#6c4635]" />
+      <div className="absolute left-0 bottom-8 h-16 w-48 rounded-tr-3xl border-4 border-l-0 border-[#6c4635] bg-[#bf7c50]" />
+      <div className="absolute right-0 bottom-7 h-28 w-32 rounded-tl-3xl border-4 border-r-0 border-[#6c4635] bg-[#a86f58]">
+        <div className="mx-5 mt-4 h-16 rounded bg-[#6c4635]/20" />
+      </div>
+      <div className="absolute right-12 top-32 flex gap-2">
+        {["#6ba36f", "#d77955", "#7b9f65"].map((color, index) => (
+          <div key={color} className="relative h-16 w-8">
+            <div className="absolute bottom-0 h-7 w-8 rounded-b-lg border-2 border-[#6c4635] bg-[#b76f4c]" />
+            <div
+              className="absolute bottom-6 left-1 h-10 w-6 rounded-full border-2 border-[#6c4635]"
+              style={{ backgroundColor: color, transform: `rotate(${index * 10 - 8}deg)` }}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="absolute bottom-10 left-24 h-20 w-40 rotate-[-3deg] rounded-lg border-4 border-[#6c4635] bg-[#c98855]">
+        <p className="pt-8 text-center text-lg font-black text-[#6c4635]">CATNAP</p>
+      </div>
+      <div className="absolute bottom-24 left-36 h-16 w-24">
+        <div className="absolute bottom-0 h-12 w-24 rounded-[50%] border-4 border-[#6c4635] bg-[#df8b52]" />
+        <div className="absolute left-3 top-0 h-8 w-8 rotate-[-20deg] rounded-tl-full border-l-4 border-t-4 border-[#6c4635] bg-[#df8b52]" />
+        <div className="absolute right-3 top-0 h-8 w-8 rotate-[20deg] rounded-tr-full border-r-4 border-t-4 border-[#6c4635] bg-[#df8b52]" />
+        <div className="absolute left-9 top-6 h-2 w-2 rounded-full bg-[#3c2b24]" />
+        <div className="absolute right-9 top-6 h-2 w-2 rounded-full bg-[#3c2b24]" />
+      </div>
+      <div className="absolute bottom-0 left-0 h-16 w-full bg-[linear-gradient(45deg,#f4d28c_25%,transparent_25%),linear-gradient(-45deg,#f4d28c_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#f4d28c_75%),linear-gradient(-45deg,transparent_75%,#f4d28c_75%)] bg-[length:34px_34px] bg-[position:0_0,0_17px,17px_-17px,-17px_0] opacity-80" />
+      <div className="absolute inset-0 rounded-[28px] border-2 border-[#3C2B24]/80" />
+    </div>
   );
 }
 
