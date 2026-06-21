@@ -1,22 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter_Tight } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const interTight = Inter_Tight({
   subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap"
+  variable: "--font-inter-tight",
+  display: "swap",
+  weight: ["400", "500", "700", "800", "900"]
 });
 
 export const metadata: Metadata = {
   title: "Save Pookie",
-  description: "A cute gamified savings app for keeping Pookie happy."
+  description: "šetři, aniž bys přemýšlela 🪐"
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#FAFAF7"
+  themeColor: "#FAF8F5"
 };
 
 export default function RootLayout({
@@ -25,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.variable}>{children}</body>
+    <html lang="cs">
+      <body className={interTight.variable}>{children}</body>
     </html>
   );
 }

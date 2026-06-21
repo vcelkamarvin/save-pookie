@@ -8,30 +8,38 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        pookie: {
-          bg: "#FAFAF7",
-          card: "#FFFFFF",
-          pink: "#F7A8C8",
-          purple: "#A88CFF",
-          mint: "#BFE7FF",
-          yellow: "#F6C85F",
-          text: "#1F1F1F",
-          muted: "#8A8A8A",
-          danger: "#FF6F91",
-          success: "#63D68A",
-          ink: "#1F1F1F",
-          border: "#EDEDE8"
-        }
-      },
-      boxShadow: {
-        soft: "0 18px 50px rgba(31, 31, 31, 0.08)",
-        button: "0 10px 24px rgba(31, 31, 31, 0.10)"
-      },
-      borderRadius: {
-        pookie: "30px"
+        pink: "#FF7BD5",
+        pinkSoft: "#FFE3F4",
+        pinkDeep: "#993556",
+        cream: "#FAF8F5",
+        ink: "#111111",
+        tangerine: "#FF8A3D",
+        sky: "#7FB8FF",
+        lime: "#B6F09C",
+        lavender: "#C9A8FF",
+        success: "#639922",
+        warning: "#EF9F27",
+        danger: "#E24B4A",
+        muted: "#888888",
+        border: "#EBEBEB"
       },
       fontFamily: {
-        rounded: ["var(--font-inter)", "Helvetica Neue", "Arial", "system-ui", "sans-serif"]
+        display: ["var(--font-inter-tight)", "Helvetica Neue", "Arial", "system-ui", "sans-serif"]
+      },
+      boxShadow: {
+        soft: "0 8px 32px rgba(17,17,17,0.07)",
+        card: "0 2px 12px rgba(17,17,17,0.06)",
+        pill: "0 4px 20px rgba(17,17,17,0.18)"
+      },
+      borderRadius: {
+        pill: "9999px",
+        card: "24px",
+        "card-lg": "32px"
+      },
+      letterSpacing: {
+        tightest: "-0.04em",
+        tighter: "-0.03em",
+        tight: "-0.02em"
       }
     }
   },
